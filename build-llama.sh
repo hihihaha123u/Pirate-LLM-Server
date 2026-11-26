@@ -13,15 +13,13 @@ COMMON_CXX_FLAGS="-Wno-macro-redefined -Wno-shorten-64-to-32 -Wno-unused-command
 
 COMMON_CMAKE_ARGS=(
     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
-    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=""
+    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_IDENTITY=""
     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
     -DBUILD_SHARED_LIBS=OFF
     -DLLAMA_BUILD_EXAMPLES=OFF
     -DLLAMA_BUILD_TOOLS=OFF
     -DLLAMA_BUILD_TESTS=OFF
     -DLLAMA_BUILD_SERVER=OFF
-    -DLLAMA_BUILD_COMMON=OFF
-    -DLLAMA_BUILD_APP=OFF
     -DGGML_METAL_EMBED_LIBRARY=ON
     -DGGML_BLAS_DEFAULT=ON
     -DGGML_METAL=ON
@@ -50,7 +48,7 @@ cmake -B build-ios-device -G Xcode \
     -DCMAKE_C_FLAGS="${COMMON_C_FLAGS}" \
     -DCMAKE_CXX_FLAGS="${COMMON_CXX_FLAGS}" \
     -S .
-cmake --build build-ios-device --config Release -- -quiet
+cmake --build build-ios-device --target llama --config Release -- -quiet
 echo "  Done."
 
 # 2. Build for iOS simulator (arm64 + x86_64 for Mac)
@@ -66,7 +64,7 @@ cmake -B build-ios-sim -G Xcode \
     -DCMAKE_C_FLAGS="${COMMON_C_FLAGS}" \
     -DCMAKE_CXX_FLAGS="${COMMON_CXX_FLAGS}" \
     -S .
-cmake --build build-ios-sim --config Release -- -quiet
+cmake --build build-ios-sim --target llama --config Release -- -quiet
 echo "  Done."
 
 echo ""
