@@ -1,6 +1,6 @@
 # Pirate LLM Server
 
-Turn your iPhone into a local LLM server with an OpenAI-compatible API. Run any GGUF model on-device with Metal GPU acceleration and serve it over your local network.
+Turn your iPhone into a local LLM server with an OpenAI-compatible API. Run any GGUF model on-device with Metal GPU acceleration and serve it over your local network..
 
 No cloud. No subscriptions. No jailbreak. Just your iPhone and a model.
 
