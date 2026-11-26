@@ -83,9 +83,9 @@ create_dynamic_framework() {
     local FW_DIR="${BUILD_DIR}/framework/llama.framework"
     mkdir -p "${FW_DIR}/Headers" "${FW_DIR}/Modules"
 
-    # Collect only the core static libs (exclude libcommon.a, libcpp-httplib.a, libbuild_info.a)
+    # Collect only final static libs (exclude Xcode intermediate Objects-normal archives & non-inference libs)
     local STATIC_LIBS=""
-    for lib in $(find ${BUILD_DIR} -name "*.a" -path "*/${PLATFORM}/*" | sort); do
+    for lib in $(find "${BUILD_DIR}" -name "*.a" -path "*/${PLATFORM}/*" ! -path "*/Objects-normal/*" | sort -u); do
         local basename=$(basename "$lib")
         case "$basename" in
             libcommon.a|libcpp-httplib.a|libbuild_info.a)
@@ -93,7 +93,7 @@ create_dynamic_framework() {
                 ;;
             *)
                 STATIC_LIBS="${STATIC_LIBS} ${lib}"
-                echo "  Including $basename"
+                echo "  Including $lib"
                 ;;
         esac
     done
@@ -180,9 +180,9 @@ create_dynamic_framework "build-ios-device" "Release-iphoneos" "arm64" "iphoneos
 SIM_FW_DIR="build-ios-sim/framework/llama.framework"
 mkdir -p "${SIM_FW_DIR}/Headers" "${SIM_FW_DIR}/Modules"
 
-# Collect sim static libs
+# Collect final sim static libs (exclude Objects-normal intermediate archives)
 SIM_STATIC_LIBS=""
-for lib in $(find build-ios-sim -name "*.a" -path "*/Release-iphonesimulator/*" | sort); do
+for lib in $(find build-ios-sim -name "*.a" -path "*/Release-iphonesimulator/*" ! -path "*/Objects-normal/*" | sort -u); do
     basename=$(basename "$lib")
     case "$basename" in
         libcommon.a|libcpp-httplib.a|libbuild_info.a)
@@ -190,7 +190,7 @@ for lib in $(find build-ios-sim -name "*.a" -path "*/Release-iphonesimulator/*" 
             ;;
         *)
             SIM_STATIC_LIBS="${SIM_STATIC_LIBS} ${lib}"
-            echo "  Including $basename (simulator)"
+            echo "  Including $lib (simulator)"
             ;;
     esac
 done
